@@ -23,11 +23,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nchimicles/wrangler-profiles.git"
+    "url": "https://github.com/nac-codes/wrangler-profiles.git"
   },
-  "homepage": "https://github.com/nchimicles/wrangler-profiles#readme",
+  "homepage": "https://github.com/nac-codes/wrangler-profiles#readme",
   "bugs": {
-    "url": "https://github.com/nchimicles/wrangler-profiles/issues"
+    "url": "https://github.com/nac-codes/wrangler-profiles/issues"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
