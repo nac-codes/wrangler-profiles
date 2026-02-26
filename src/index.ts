@@ -10,7 +10,14 @@ import { spawn, spawnSync } from "node:child_process";
 
 const PROFILES_DIR = path.join(os.homedir(), ".wrangler-profiles");
 const CURRENT_PROFILE_FILE = path.join(PROFILES_DIR, ".current");
-const WRANGLER_CONFIG_DIR = path.join(os.homedir(), ".wrangler", "config");
+
+// Wrangler stores config in different locations per platform
+// macOS: ~/Library/Preferences/.wrangler/config/
+// Linux/Windows: ~/.wrangler/config/
+const WRANGLER_CONFIG_DIR =
+  process.platform === "darwin"
+    ? path.join(os.homedir(), "Library", "Preferences", ".wrangler", "config")
+    : path.join(os.homedir(), ".wrangler", "config");
 const WRANGLER_DEFAULT_TOML = path.join(WRANGLER_CONFIG_DIR, "default.toml");
 
 // Ensure profiles directory exists
@@ -200,17 +207,25 @@ function getWranglerWhoami(): { accountId: string; email: string } | null {
 
     if (result.status !== 0) return null;
 
-    const output = result.stdout;
+    const output = result.stdout + result.stderr;
 
-    // Parse account ID from output like:
-    // Account Name | Account ID
-    // Some Account | abc123def456
+    // Parse email from output like:
+    // 👋 You are logged in with an OAuth Token, associated with the email user@example.com.
+    let email = "";
+    const emailMatch = output.match(/email\s+([\w.-]+@[\w.-]+\.[a-z]{2,})/i);
+    if (emailMatch) {
+      email = emailMatch[1];
+    }
+
+    // Parse account ID from table output like:
+    // │ Account Name │ 3d435d93740e4882bf0958911093cf31 │
+    // Uses Unicode box-drawing character │ (U+2502) not ASCII |
     const lines = output.split("\n");
     for (const line of lines) {
-      // Look for line with account ID (32 char hex string)
-      const match = line.match(/\|\s*([a-f0-9]{32})\s*$/i);
+      // Look for 32-char hex string (account ID) in the line
+      const match = line.match(/([a-f0-9]{32})/i);
       if (match) {
-        return { accountId: match[1], email: "" };
+        return { accountId: match[1], email };
       }
     }
 
