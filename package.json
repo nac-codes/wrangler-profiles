@@ -15,10 +15,20 @@
     "cloudflare",
     "wrangler",
     "profiles",
-    "cli"
+    "cli",
+    "workers",
+    "multi-account"
   ],
-  "author": "",
+  "author": "Nick Chimicles",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nchimicles/wrangler-profiles.git"
+  },
+  "homepage": "https://github.com/nchimicles/wrangler-profiles#readme",
+  "bugs": {
+    "url": "https://github.com/nchimicles/wrangler-profiles/issues"
+  },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0"
