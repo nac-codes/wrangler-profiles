@@ -58,6 +58,18 @@ Manually enter an API token from the [Cloudflare dashboard](https://dash.cloudfl
 wrangler-profiles add myaccount --token
 ```
 
+### Re-authenticating OAuth Profiles
+
+When your OAuth tokens expire, use the built-in re-auth command:
+
+```bash
+wrangler-profiles login <name>
+```
+
+**Important**: Don't use `wrangler login` directly. Running `wrangler login` updates wrangler's global config but does *not* update your stored profile credentials. If you do this, your profile will have outdated tokens that get restored the next time you switch profiles.
+
+The `wrangler-profiles login <name>` command handles this correctly by running the OAuth flow and then saving the fresh tokens back to your profile storage.
+
 ## How It Works
 
 - **OAuth profiles**: Manages `~/.wrangler/config/default.toml` (or `~/Library/Preferences/.wrangler/config/default.toml` on macOS)
